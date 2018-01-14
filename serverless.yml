@@ -1,0 +1,51 @@
+service: cloudquiz
+plugins:
+  - serverless-finch
+custom:
+  client:
+    bucketName: cloudquiz
+    distributionFolder: client/dist    
+provider:
+  name: aws
+  runtime: nodejs6.10
+  profile: jounile
+  region: eu-central-1
+  environment:
+    MY_TABLE: questions
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+      Resource: arn:aws:dynamodb:*:*:table/questions
+functions:
+  myfunction:
+    handler: getDataLambda.get
+    events:
+      - http: GET questions
+    memorySize: 128
+    timeout: 10
+resources:
+  Resources:
+    MyTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: source
+            AttributeType: S
+          -
+            AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: source
+            KeyType: HASH
+          -
+            AttributeName: timestamp
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: questions
