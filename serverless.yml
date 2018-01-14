@@ -20,10 +20,13 @@ provider:
         - dynamodb:GetItem
       Resource: arn:aws:dynamodb:*:*:table/questions
 functions:
-  myfunction:
-    handler: getDataLambda.get
+  getQuestionsFunction:
+    handler: handler.getQuestions
     events:
-      - http: GET questions
+      - http: 
+          path: questions
+          method: get
+          cors: true
     memorySize: 128
     timeout: 10
 resources:

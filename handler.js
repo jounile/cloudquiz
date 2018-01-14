@@ -1,12 +1,9 @@
 'use strict';
 
-console.log('Loading function');
-
 const doc = require('dynamodb-doc');
-
 const dynamo = new doc.DynamoDB();
 
-module.exports.get = (event, context, callback) => {
+module.exports.getQuestions = (event, context, callback) => {
     //console.log('Received event:', JSON.stringify(event, null, 2));
 
     const done = (err, res) => callback(null, {
