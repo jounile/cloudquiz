@@ -1,7 +1,7 @@
 service: cloudquiz   
 provider:
   name: azure
-  location: West US
+  location: West Europe
 
 plugins:
   - serverless-azure-functions
@@ -21,12 +21,31 @@ functions:
     events:
       - http: true
         x-azure-settings:
-          authLevel : anonymous
-      - http: true
-        x-azure-settings:
-          direction: out
-          name: res
+            name: req #<string>, default - "req", specifies which name it's available on `context.bindings`
+            methods: [POST] #<array> [GET, POST, PUT, DELETE], default - all
+            route: hello #<string>, default - <function name>
+            authLevel: anonymous #<enum - anonymous|function (default)|admin>
 
+#      - http: true
+#        x-azure-settings:
+#          authLevel : anonymous
+#      - http: true
+#        x-azure-settings:
+#          direction: out
+#          name: res
+#      - queue: hello
+#        x-azure-settings:
+#            name: item #<string>, default - "myQueueItem", specifies which name it's available on `context.bindings`
+#            connection: AzureWebJobsStorage #<string>, default - "AzureWebJobsStorage", environment variable which contains Storage Account Connection String
+      - documentDB:
+        x-azure-settings:
+            name: record # Name of input parameter in function signature>",
+            databaseName: quiz # "<Name of the DocumentDB database>",
+            collectionName: answers # "<Name of the DocumentDB collection>",
+            createIfNotExists: true
+            connection: quiz # "<Name of app setting with connection string - see below>",
+#            direction: out # Must be removed due to a bug in serverless framework. https://github.com/serverless/serverless-azure-functions/issues/36
+      
 # The following are a few examples of other events you can configure:
 #
 # events:

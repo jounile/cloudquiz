@@ -5,12 +5,20 @@
             "type": "httpTrigger",
             "direction": "in",
             "name": "req",
-            "authLevel": "anonymous"
+            "route": "hello",
+            "authLevel": "anonymous",
+            "methods": [
+                "POST"
+            ]
         },
         {
-            "type": "http",
+            "type": "documentDB",
             "direction": "out",
-            "name": "res"
+            "name": "record",
+            "databaseName": "quiz",
+            "collectionName": "answers",
+            "createIfNotExists": true,
+            "connection": "quiz"
         }
     ],
     "entryPoint": "hello"
