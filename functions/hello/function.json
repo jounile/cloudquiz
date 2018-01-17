@@ -5,11 +5,7 @@
             "type": "httpTrigger",
             "direction": "in",
             "name": "req",
-            "route": "hello",
-            "authLevel": "anonymous",
-            "methods": [
-                "POST"
-            ]
+            "authLevel": "anonymous"
         },
         {
             "type": "documentDB",

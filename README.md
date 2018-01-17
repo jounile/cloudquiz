@@ -37,7 +37,10 @@ Test function
 ```
 curl -X POST https://cloudquiz.azurewebsites.net/api/hello -H "Content-Type: application/json" -d '{ "id":"4444", "name":"jouni" }' 
 ```
-
+or
+```
+serverless invoke -f hello --path data.json
+```
 
 ### Frontend
 

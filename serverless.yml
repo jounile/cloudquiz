@@ -22,8 +22,8 @@ functions:
       - http: true
         x-azure-settings:
             name: req #<string>, default - "req", specifies which name it's available on `context.bindings`
-            methods: [POST] #<array> [GET, POST, PUT, DELETE], default - all
-            route: hello #<string>, default - <function name>
+#            methods: [POST] #<array> [GET, POST, PUT, DELETE], default - all
+#            route: hello #<string>, default - <function name> ## https://github.com/serverless/serverless-azure-functions/issues/86
             authLevel: anonymous #<enum - anonymous|function (default)|admin>
 
 #      - http: true
