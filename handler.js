@@ -7,10 +7,6 @@
 module.exports.hello = function (context, req) {
   
   context.log("Request Headers = " + JSON.stringify(req.headers));
-  context.log("Request Body = " + JSON.stringify(req.body));
-
-  context.log("Request Query = " + req.query.id);
-  context.log("Request Query = " + req.query.name);
 
   const query = req.query; // dictionary of query strings
   const body = req.body; // Parsed body based on content-type
@@ -23,6 +19,8 @@ module.exports.hello = function (context, req) {
   if (req.query.name || (req.body && req.body.name)) {
  
     if (req.body && req.body.name) {
+      context.log("Request Query Id = " + req.query.id);
+      context.log("Request Query Name = " + req.query.name);
       context.bindings.record = {
         id: req.body.id,
         name: req.body.name
@@ -30,6 +28,9 @@ module.exports.hello = function (context, req) {
     }
 
     if (req.query.name){
+          
+      context.log("Request Body Id = " + req.query.id);
+      context.log("Request Body Name = " + req.query.name);
       context.bindings.record = {
         id: req.query.id,
         name: req.query.name
@@ -37,7 +38,7 @@ module.exports.hello = function (context, req) {
     }
 
     context.res = {
-      // status: 200, /* Defaults to 200 */
+      status: 200, /* Defaults to 200 */
       body: "Hello " + (req.query.name || req.body.name)
     };
 
