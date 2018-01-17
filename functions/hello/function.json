@@ -8,6 +8,11 @@
             "authLevel": "anonymous"
         },
         {
+            "type": "http",
+            "direction": "out",
+            "name": "res"
+        },
+        {
             "type": "documentDB",
             "direction": "out",
             "name": "record",
