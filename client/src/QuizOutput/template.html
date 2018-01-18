@@ -4,6 +4,7 @@
   </p>
   <p v-else>
     Below are the results for {{ currentAnswer }}
-    <github-user-data :data="githubData[currentAnswer]"></github-user-data>
+    <answer-data :data="answerData[currentAnswer]"></answer-data>
+    <!--<github-user-data :data="githubData[currentAnswer]"></github-user-data>-->
   </p>
 </div>
