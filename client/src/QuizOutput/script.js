@@ -26,8 +26,8 @@ export default {
       if (this.answerData.hasOwnProperty(name)) return
       console.log("process.env.API_PATH: " + process.env.API_PATH);
       const url = process.env.API_PATH;
-
-      const data = new Object({ 'id':'1234', 'name':`${name}`});
+      const random = '' + Math.floor(Math.random() * 9000000000) + 1000000000;
+      const data = new Object({ 'id': random, 'name':`${name}`});
       console.log("data: " + JSON.stringify(data));
 
       axios.post(url, data).then((response) => {
