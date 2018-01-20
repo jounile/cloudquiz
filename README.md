@@ -65,11 +65,7 @@ npm run dev
 npm run build
 ```
 
-#### Deploy frontend
 
-```
-sls client deploy
-```
 
 
 
