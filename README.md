@@ -47,16 +47,11 @@ serverless invoke -f answer --path data.json
 #### Install tools
 
 ```
-npm install -g vue-cli
-
-vue init webpack-simple cloudquiz
-
 cd cloudquiz
-
-npm install axios --save
 
 npm install
 ```
+This will install packages vue, vue-router, axios
 
 #### Run locally
 

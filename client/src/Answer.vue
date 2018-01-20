@@ -1,16 +1,19 @@
+<template>
+  <div id="answer">
+	<quiz-input></quiz-input>
+	<quiz-output></quiz-output>
+  </div>
+</template>
+
+<script>
 import QuizInput from './QuizInput/index'
 import QuizOutput from './QuizOutput/index'
 
 export default {
-  name: 'app',
+  name: 'QuizInput',
   components: {
     'quiz-input': QuizInput,
     'quiz-output': QuizOutput
   },
-  data() {
-    return {
-      title: 'Cloud Quiz',
-      msg: 'Serverless Vue.js App'
-    }
-  },
 }
+</script>
