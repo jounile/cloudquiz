@@ -1,14 +1,18 @@
 <template>
   <div id="app">
-    <img src="./assets/serverless-logo.png" width="400" height="">
-    <img src="./assets/vue-logo.png" >
-
     <h1>{{ title }}</h1>
-    <h2>{{ msg }}</h2>
+
     <ul>
-      <li><a href="https://vuejs.org" target="_blank">vuejs.org</a></li>
-      <li><a href="https://serverless.com" target="_blank">serverless.com</a></li>
-      <li><a href="https://github.com/fernando-mc/serverless-finch" target="_blank">Finch plugin</a></li>
+      <li>
+        <a href="https://vuejs.org" target="_blank">
+          <img src="./assets/vue-logo.png" width="" height="50">
+        </a>
+      </li>
+      <li>
+        <a href="https://serverless.com" target="_blank">
+          <img src="./assets/serverless-logo.png" width="200" height="">
+        </a>
+      </li>
     </ul>
 
   	<router-view></router-view>
@@ -24,7 +28,7 @@ export default {
   data() {
     return {
       title: 'Cloud Quiz',
-      msg: 'Serverless Vue.js App'
+      msg: 'A Serverless Vue.js App'
     }
   }
 }
