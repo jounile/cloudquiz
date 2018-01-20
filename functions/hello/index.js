@@ -4,7 +4,7 @@
 
 /* eslint-disable no-param-reassign */
 
-module.exports.hello = function (context, req) {
+module.exports.saveanswer = function (context, req) {
   
   context.log("Request Headers = " + JSON.stringify(req.headers));
 
@@ -19,8 +19,8 @@ module.exports.hello = function (context, req) {
   if (req.query.name || (req.body && req.body.name)) {
  
     if (req.body && req.body.name) {
-      context.log("Request Query Id = " + req.query.id);
-      context.log("Request Query Name = " + req.query.name);
+      context.log("Request Body Id = " + req.body.id);
+      context.log("Request Body Name = " + req.body.name);
       context.bindings.record = {
         id: req.body.id,
         name: req.body.name
@@ -29,8 +29,8 @@ module.exports.hello = function (context, req) {
 
     if (req.query.name){
           
-      context.log("Request Body Id = " + req.query.id);
-      context.log("Request Body Name = " + req.query.name);
+      context.log("Request Query Id = " + req.query.id);
+      context.log("Request Query Name = " + req.query.name);
       context.bindings.record = {
         id: req.query.id,
         name: req.query.name
@@ -39,7 +39,7 @@ module.exports.hello = function (context, req) {
 
     context.res = {
       status: 200, /* Defaults to 200 */
-      body: "Hello " + (req.query.name || req.body.name)
+      body: "Saved " + (req.query.name || req.body.name) + "in the database."
     };
 
   } else {

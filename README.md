@@ -29,17 +29,17 @@ serverless deploy
 Deploy only the lambda function
 
 ```
-sls deploy function -f hello
+sls deploy function -f answer
 ```
 
 Test function
 
 ```
-curl -X POST https://cloudquiz.azurewebsites.net/api/hello -H "Content-Type: application/json" -d '{ "id":"4444", "name":"jouni" }' 
+curl -X POST https://cloudquiz.azurewebsites.net/api/answer -H "Content-Type: application/json" -d '{ "id":"4444", "name":"jouni" }' 
 ```
 or
 ```
-serverless invoke -f hello --path data.json
+serverless invoke -f answer --path data.json
 ```
 
 ### Frontend
@@ -49,9 +49,11 @@ serverless invoke -f hello --path data.json
 ```
 npm install -g vue-cli
 
-vue init webpack-simple myservice
+vue init webpack-simple cloudquiz
 
-cd myservice
+cd cloudquiz
+
+npm install axios --save
 
 npm install
 ```

@@ -61,7 +61,7 @@ if (process.env.NODE_ENV === 'development') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"',
-        API_PATH: '"https://cloudquiz.azurewebsites.net/api/hello"'
+        API_PATH: '"https://cloudquiz.azurewebsites.net/api/answer"'
       }
     })
   ])

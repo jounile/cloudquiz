@@ -1,4 +1,4 @@
-service: cloudquiz   
+service: cloudquiz
 provider:
   name: azure
   location: West Europe
@@ -16,8 +16,8 @@ plugins:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  answer:
+    handler: handler.answer
     events:
       - http: true
         x-azure-settings:

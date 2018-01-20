@@ -22,5 +22,5 @@
             "connection": "quiz"
         }
     ],
-    "entryPoint": "saveanswer"
+    "entryPoint": "answer"
 }

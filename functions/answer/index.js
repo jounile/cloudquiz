@@ -39,7 +39,7 @@ module.exports.answer = function (context, req) {
 
     context.res = {
       status: 200, /* Defaults to 200 */
-      body: "Saved " + (req.query.name || req.body.name) + " in the database."
+      body: "Saved " + (req.query.name || req.body.name) + "in the database."
     };
 
   } else {
