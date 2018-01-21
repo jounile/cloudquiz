@@ -8,28 +8,18 @@
 
 #### Install tools
 
-Serverless
-
 ```
-npm install serverless -g
+npm install
 ```
 
 https://serverless.com
 
 
 
-#### Deploy backend
-
-Deploy backend (API, Functions & Database)
+#### Deploy functions
 
 ```
 serverless deploy
-```
-
-Deploy only the lambda function
-
-```
-sls deploy function -f answer
 ```
 
 Test function

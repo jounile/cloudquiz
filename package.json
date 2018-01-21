@@ -9,5 +9,8 @@
   ],
   "devDependencies": {
     "serverless-azure-functions": "*"
+  },
+  "dependencies": {
+    "serverless": "^1.25.0"
   }
 }
