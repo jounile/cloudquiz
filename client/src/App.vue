@@ -1,34 +1,24 @@
 <template>
   <div id="app">
-    <h1>{{ title }}</h1>
 
-    <ul>
-      <li>
-        <a href="https://vuejs.org" target="_blank">
-          <img src="./assets/vue-logo.png" width="" height="50">
-        </a>
-      </li>
-      <li>
-        <a href="https://serverless.com" target="_blank">
-          <img src="./assets/serverless-logo.png" width="200" height="">
-        </a>
-      </li>
-    </ul>
+    <app-header></app-header>
 
   	<router-view></router-view>
-
     
   </div>
 </template>
 
 
 <script>
+import header from './Header.vue'
+
 export default {
   name: 'app',
+  components: {
+    'app-header': header
+  },
   data() {
     return {
-      title: 'Cloud Quiz',
-      msg: 'A Serverless Vue.js App'
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
 <div id="home">
-  <a href="/answer">Give your answer</a>
+	<h1>Home</h1>
 </div>
 </template>
 
@@ -14,3 +14,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>

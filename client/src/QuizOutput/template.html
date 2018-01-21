@@ -1,9 +1,6 @@
 <div>
-  <p v-if="currentAnswer == null">
-    Enter answer above to see their Quiz data
-  </p>
-  <p v-else>
-    Below are the results for {{ currentAnswer }}
+  <p v-if="currentAnswer != null">
+    You entered {{ currentAnswer }}
     <answer-data :data="answerData[currentAnswer]"></answer-data>
   </p>
 </div>
