@@ -18,6 +18,27 @@ https://serverless.com
 
 #### Deploy functions
 
+##### ARM Template
+
+```
+az login
+```
+
+```
+az group create --name CloudquizResourceGroup --location "West Europe"
+```
+
+```
+az group deployment create \
+    --name CloudquizDeployment \
+    --resource-group CloudquizResourceGroup \
+    --template-file azuredeploy.json \
+    --parameters @azuredeploy.parameters.json
+```
+
+
+##### Serverless template
+
 ```
 serverless deploy
 ```
