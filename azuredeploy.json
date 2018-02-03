@@ -54,41 +54,28 @@
 			"metadata": {
 				"description": "Storage Account type"
 			}
-#		},
-#		"repoURL": {
-#			"type": "string",
-#			"defaultValue": "https://github.com/jounile/somefunctionrepo.git",
-#			"metadata": {
-#				"description": "The URL for the GitHub repository that contains the project to deploy."
-#			}
-#		},
-#		"branch": {
-#			"type": "string",
-#			"defaultValue": "master",
-#			"metadata": {
-#				"description": "The branch of the GitHub repository to use."
-#			}
 		}
 	},
 	"variables": {
 		"DocumentDBName": "[concat(parameters('AccountNamesPrefix'), 'db', uniqueString(resourceGroup().id))]",
 		"functionAppName": "[parameters('appName')]",
 		"hostingPlanName": "[concat(parameters('appName'), '-plan')]",
-		"storageAccountName": "[concat(uniquestring(resourceGroup().id), 'functions')]"
+		"storageAccountName": "[concat(uniquestring(resourceGroup().id), 'functions')]",
+		"storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
 	},
 	"resources": [{
-      		"name": "[variables('DocumentDBName')]",
-      		"location": "[resourceGroup().location]",
-      		"apiVersion": "2015-04-08",
-      		"type": "Microsoft.DocumentDB/databaseAccounts",
-      		"properties": {
-        		"databaseAccountOfferType": "Standard",
-        		"consistencyPolicy": {
-          			"defaultConsistencyLevel": "Session",
-          			"maxIntervalInSeconds": 5,
-          			"maxStalenessPrefix": 100
-        		}
-      		}
+  		"name": "[variables('DocumentDBName')]",
+  		"location": "[resourceGroup().location]",
+  		"apiVersion": "2015-04-08",
+  		"type": "Microsoft.DocumentDB/databaseAccounts",
+  		"properties": {
+    		"databaseAccountOfferType": "Standard",
+    		"consistencyPolicy": {
+      			"defaultConsistencyLevel": "Session",
+      			"maxIntervalInSeconds": 5,
+      			"maxStalenessPrefix": 100
+    		}
+  		}
 	}, {
 		"type": "Microsoft.Storage/storageAccounts",
 		"name": "[variables('storageAccountName')]",
@@ -98,64 +85,56 @@
 			"accountType": "[parameters('storageAccountType')]"
 		}
 	}, {
-		"type": "Microsoft.Web/serverfarms",
-		"apiVersion": "2015-04-01",
-		"name": "[variables('hostingPlanName')]",
-		"location": "[resourceGroup().location]",
-		"properties": {
-			"name": "[variables('hostingPlanName')]",
-			"sku": "[parameters('sku')]",
-			"workerSize": "[parameters('workerSize')]",
-			"hostingEnvironment": "",
-			"numberOfWorkers": 1
-		}
-#	}, {
-#		"apiVersion": "2015-08-01",
-#		"type": "Microsoft.Web/sites",
-#		"name": "[variables('functionAppName')]",
-#		"location": "[resourceGroup().location]",
-#		"kind": "functionapp",
-#		"properties": {
-#			"name": "[variables('functionAppName')]",
-#			"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-#			"hostingEnvironment": "",
-#			"clientAffinityEnabled": false,
-#			"siteConfig": {
-#				"alwaysOn": true,
-#				"cors": {
-#					"allowedOrigins": [
-#						"*"
-#					]
-#				},
-#				"appSettings": [{
-#					"name": "FUNCTIONS_EXTENSION_VERSION",
-#					"value": "~1"
-#				}, {
-#					"name": "AzureWebJobsStorage",
-#					"value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-05-01-preview').key1,';')]"
-#				}, {
-#					"name": "AzureWebJobsDashboard",
-#					"value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-05-01-preview').key1,';')]"
-#				}]
-#			}
-#		},
-#		"dependsOn": [
-#			"[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-#			"[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-#		],
-#		"resources": [{
-#			"apiVersion": "2015-08-01",
-#			"name": "web",
-#			"type": "sourcecontrols",
-#			"dependsOn": [
-#				"[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
-#			],
-#			"properties": {
-#				"RepoUrl": "[parameters('repoURL')]",
-#				"branch": "[parameters('branch')]",
-#				"IsManualIntegration": true
-#			}
-#		}]
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2015-04-01",
+        "name": "[variables('hostingPlanName')]",
+        "location": "[resourceGroup().location]",
+        "properties": {
+            "name": "[variables('hostingPlanName')]",
+            "computeMode": "Dynamic",
+            "sku": "Dynamic"
+        }
+	}, {
+        "apiVersion": "2015-08-01",
+        "type": "Microsoft.Web/sites",
+        "name": "[variables('functionAppName')]",
+        "location": "[resourceGroup().location]",
+        "kind": "functionapp",            
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+        ],
+        "properties": {
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+            "siteConfig": {
+                "appSettings": [
+                    {
+                        "name": "AzureWebJobsDashboard",
+                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                    },
+                    {
+                        "name": "AzureWebJobsStorage",
+                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                    },
+                    {
+                        "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                    },
+                    {
+                        "name": "WEBSITE_CONTENTSHARE",
+                        "value": "[toLower(variables('functionAppName'))]"
+                    },
+                    {
+                        "name": "FUNCTIONS_EXTENSION_VERSION",
+                        "value": "~1"
+                    },
+                    {
+                        "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                        "value": "6.5.0"
+                    }
+                ]
+            }
+        }          
 	}]
 }
 
