@@ -19,8 +19,6 @@ az group deployment create \
     --template-file azuredeploy.json \
     --parameters @azuredeploy.parameters.json
 
-echo "Deploy runtime resources"
-
 echo "Create database"
 az cosmosdb database create \
 	--name $appName \
