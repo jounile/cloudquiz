@@ -34,7 +34,7 @@ Deploy resources
 
 Clean up
 ```
-az group delete --name CloudquizResourceGroup
+az group delete --name Cloudquiz-rg
 ```
 
 <!--

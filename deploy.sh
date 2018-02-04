@@ -1,17 +1,48 @@
 #!/bin/bash
 
-# Create a resource group.
-az group create --name Cloudquiz-rg --location "West Europe"
+appName="cloudquiz"
+location="WestEurope"
+deploymentName="CloudquizDeployment"
+resourceGroup="Cloudquiz-rg"
+cosmosDbAccountName="cloudquiz"
+collectionName="quiz"
+databaseName="answers"
+originalThroughput=400
 
-# Deploy ARM template.
+echo "Create a resource group."
+az group create --name $resourceGroup --location $location
+
+echo "Deploy ARM template."
 az group deployment create \
-    --name CloudquizDeployment \
-    --resource-group Cloudquiz-rg \
+    --name $deploymentName \
+    --resource-group $resourceGroup \
     --template-file azuredeploy.json \
     --parameters @azuredeploy.parameters.json
 
-# Deploy runtime resources
+echo "Deploy runtime resources"
 
+echo "Create database"
+az cosmosdb database create \
+	--name $appName \
+	--db-name $databaseName \
+	--resource-group $resourceGroup
+
+echo "Create collection"
+az cosmosdb collection create \
+	--collection-name $collectionName \
+	--name $cosmosDbAccountName \
+	--db-name $databaseName \
+	--resource-group $resourceGroup \
+	--throughput $originalThroughput
+
+#echo "Get the MongoDB URL"
+#connectionString=$(az cosmosdb list-connection-strings \
+#	--name $appName \
+#	--resource-group $resourceGroup \
+#	--query connectionStrings[0].connectionString \
+#	--output tsv)
+
+#echo connectionString
 
 # Display the function path.
 echo https://cloudquiz.azurewebsites.net
