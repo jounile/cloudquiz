@@ -22,39 +22,39 @@ https://serverless.com
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjounile%2Fcloudquiz%2Fblob%2Fmaster%2Fazuredeploy.json" target="_blank">![Deploy to Azure](http://azuredeploy.net/deploybutton.png)</a>
 
-
+Connect to Azure
 ```
 az login
 ```
 
+Deploy resources
 ```
-az group create --name CloudquizResourceGroup --location "West Europe"
-```
-
-```
-az group deployment create \
-    --name CloudquizDeployment \
-    --resource-group CloudquizResourceGroup \
-    --template-file azuredeploy.json \
-    --parameters @azuredeploy.parameters.json
+./deploy.sh
 ```
 
+Clean up
+```
+az group delete --name CloudquizResourceGroup
+```
 
+<!--
 ##### Serverless template
 
 ```
 serverless deploy
 ```
-
+-->
 Test function
 
 ```
 curl -X POST https://cloudquiz.azurewebsites.net/api/answer -H "Content-Type: application/json" -d '{ "id":"4444", "name":"jouni" }' 
 ```
+<!--
 or
 ```
 serverless invoke -f answer --path data.json
 ```
+-->
 
 ### Frontend
 
