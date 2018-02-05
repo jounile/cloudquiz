@@ -5,9 +5,12 @@ location="WestEurope"
 deploymentName="CloudquizDeployment"
 resourceGroup="Cloudquiz-rg"
 cosmosDbAccountName="cloudquiz"
+documentDBName="cloudquiz"
 collectionName="quiz"
 databaseName="answers"
 originalThroughput=400
+storageAccountName="cloudquiz"
+storageAccountType="Standard_GRS"
 
 echo "Create a resource group."
 az group create --name $resourceGroup --location $location
@@ -17,7 +20,12 @@ az group deployment create \
     --name $deploymentName \
     --resource-group $resourceGroup \
     --template-file azuredeploy.json \
-    --parameters @azuredeploy.parameters.json
+    --parameters '{"appName": {"value": "'$appName'"},
+                   "documentDBName": {"value": "'$documentDBName'"},
+                   "storageAccountName": {"value": "'$storageAccountName'"},
+                   "storageAccountType": {"value": "'$storageAccountType'"}}'
+
+#TODO: Check for DB existence
 
 echo "Create database"
 az cosmosdb database create \
@@ -32,6 +40,13 @@ az cosmosdb collection create \
 	--db-name $databaseName \
 	--resource-group $resourceGroup \
 	--throughput $originalThroughput
+
+#TODO: Migrate data
+
+#TODO: Deploy Static Website to file store
+
+#TODO: Deploy Azure functions
+
 
 #echo "Get the MongoDB URL"
 #connectionString=$(az cosmosdb list-connection-strings \
