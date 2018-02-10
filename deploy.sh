@@ -8,7 +8,7 @@ databaseName="answers"
 originalThroughput=400
 storageAccountName="CloudquizStorageAccount"
 storageAccountType="Standard_GRS"
-
+zipFile=$appName".zip"
 
 echo "Create a resource group."
 az group create --name $appName'-rg' --location $location
@@ -47,19 +47,23 @@ az cosmosdb collection create \
 #TODO: Migrate data
 
 echo "Package static website content"
-cd client && zip -r cloudquiz.zip .
+cd client && zip -r $zipFile .
 
-echo "Get FTP publishing profile and query for publish URL and credentials"
+echo "Get MSDeploy publishing profile and query for publish URL and credentials"
 creds=($(az webapp deployment list-publishing-profiles \
 	--name $appName'-wa' \
 	--resource-group $appName'-rg' \
-	--query "[?contains(publishMethod, 'FTP')].[publishUrl,userName,userPWD]" \
+	--query "[?contains(publishMethod, 'MSDeploy')].[publishUrl,userName,userPWD]" \
 	--output tsv))
 
 echo "publishUrl: " ${creds[0]}
 echo "userName: " ${creds[1]}
 echo "userPWD: " ${creds[2]}
 
+echo "Deploy ZIP file"
+curl -X POST -u ${creds[1]} \
+	--data-binary @./client/$zipFile "https://"$appName"-wa.scm.azurewebsites.net/api/zipdeploy?isAsync=true"
+
 
 # Display the function path.
-echo https://cloudquiz.azurewebsites.net
+echo "https://"$appName"-wa.azurewebsites.net"
