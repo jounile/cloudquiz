@@ -9,6 +9,8 @@ originalThroughput=400
 storageAccountName="CloudquizStorageAccount"
 storageAccountType="Standard_GRS"
 zipFile=$appName".zip"
+functions="functions.zip"
+
 
 echo "Create a resource group."
 az group create --name $appName'-rg' --location $location
@@ -44,6 +46,8 @@ az cosmosdb collection create \
 	--resource-group $appName'-rg' \
 	--throughput $originalThroughput
 
+
+
 #TODO: Migrate data
 
 echo "Package static website content"
@@ -64,6 +68,15 @@ echo "Deploy ZIP file"
 curl -X POST -u ${creds[1]} \
 	--data-binary @./client/$zipFile "https://"$appName"-wa.scm.azurewebsites.net/api/zipdeploy?isAsync=true"
 
+echo "Package functions"
+cd functions && zip -r $functions .
 
-# Display the function path.
+echo "Deploy Function App"
+az functionapp deployment source config-zip \
+	--resource-group $appName'-rg' \
+	--name $appName'-fa' \
+	--src $functions
+
+
+# Display the webapp path.
 echo "https://"$appName"-wa.azurewebsites.net"

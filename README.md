@@ -47,7 +47,7 @@ serverless deploy
 Test function
 
 ```
-curl -X POST https://cloudquiz.azurewebsites.net/api/answer -H "Content-Type: application/json" -d '{ "id":"4444", "name":"jouni" }' 
+curl -X POST https://cloudquiz-fa.azurewebsites.net/api/answer -H "Content-Type: application/json" -d '{ "id":"4444", "name":"jouni" }' 
 ```
 <!--
 or

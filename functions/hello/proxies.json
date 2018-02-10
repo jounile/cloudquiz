@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json.schemastore.org/proxies",
+    "proxies": {
+        "add-name-to-query": {
+            "matchCondition": {
+                "route": "/api/hello"
+            },
+            "backendUri": "https://cloudquiz-fa.azurewebsites.net/api/hello",
+            "requestOverrides": {
+                "backend.request.querystring.name": "Colter Wall"
+            }
+        }
+    }
+}
