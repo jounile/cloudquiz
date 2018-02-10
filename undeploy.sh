@@ -1,6 +1,6 @@
 #!/bin/bash
 
-resourceGroup="Cloudquiz-rg"
+appName="cloudquiz"
 
 echo "Deleting a resource group."
-az group delete --name $resourceGroup
+az group delete --name $appName'-rg'
