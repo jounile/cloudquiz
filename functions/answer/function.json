@@ -19,7 +19,7 @@
             "databaseName": "quiz",
             "collectionName": "answers",
             "createIfNotExists": true,
-            "connection": "quiz"
+            "connection": "CosmosDBConnection"
         }
     ],
     "entryPoint": "answer"

@@ -69,7 +69,7 @@ curl -X POST -u ${creds[1]} \
 	--data-binary @./client/$zipFile "https://"$appName"-wa.scm.azurewebsites.net/api/zipdeploy?isAsync=true"
 
 echo "Package functions"
-cd functions && zip -r $functions .
+cd ./functions && zip -r $functions .
 
 echo "Deploy Function App"
 az functionapp deployment source config-zip \
@@ -77,6 +77,28 @@ az functionapp deployment source config-zip \
 	--name $appName'-fa' \
 	--src $functions
 
+echo "Retrieve cosmosdb connection string"
+endpoint=$(az cosmosdb show \
+  --name $appName'-ddb' \
+  --resource-group $appName'-rg' \
+  --query documentEndpoint \
+  --output tsv)
+
+echo $endpoint
+
+key=$(az cosmosdb list-keys \
+  --name $appName'-ddb' \
+  --resource-group $appName'-rg' \
+  --query primaryMasterKey \
+  --output tsv)
+
+echo $key
+
+# configure function app settings to use cosmosdb connection string
+az functionapp config appsettings set \
+  --name $appName'-fa' \
+  --resource-group $appName'-rg' \
+  --setting CosmosDB_Endpoint=$endpoint CosmosDB_Key=$key CosmosDBConnection=AccountEndpoint=$endpoint;AccountKey=$key;
 
 # Display the webapp path.
 echo "https://"$appName"-wa.azurewebsites.net"
