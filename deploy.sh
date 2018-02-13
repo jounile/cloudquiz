@@ -3,8 +3,6 @@
 appName="cloudquiz"
 location="WestEurope"
 deploymentName="CloudquizDeployment"
-collectionName="quiz"
-databaseName="answers"
 originalThroughput=400
 storageAccountName="CloudquizStorageAccount"
 storageAccountType="Standard_GRS"
@@ -27,26 +25,6 @@ az group deployment create \
                    "documentDBName": {"value": "'$appName'-ddb"},
                    "storageAccountName": {"value": "'$storageAccountName'"},
                    "storageAccountType": {"value": "'$storageAccountType'"}}'
-
-# Runtime resources 
-
-#TODO: Check for DB existence
-
-echo "Create database"
-az cosmosdb database create \
-  --name $appName'-ddb' \
-  --db-name $databaseName \
-  --resource-group $appName'-rg'
-
-echo "Create collection"
-az cosmosdb collection create \
-  --collection-name $collectionName \
-  --name $appName'-ddb' \
-  --db-name $databaseName \
-  --resource-group $appName'-rg' \
-  --throughput $originalThroughput
-
-
 
 #TODO: Migrate data
 
