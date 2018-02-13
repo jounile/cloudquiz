@@ -26,7 +26,6 @@ az group deployment create \
                    "storageAccountName": {"value": "'$storageAccountName'"},
                    "storageAccountType": {"value": "'$storageAccountType'"}}'
 
-
 echo "Package static website content"
 cd client && zip -r $zipFile .
 
@@ -43,7 +42,7 @@ creds=($(az webapp deployment list-publishing-profiles \
 
 echo "Deploy ZIP file"
 curl -X POST -u ${creds[1]}:${creds[2]} \
-  --data-binary @./client/$zipFile "https://"$appName"-wa.scm.azurewebsites.net/api/zipdeploy?isAsync=true"
+  --data-binary @./$zipFile "https://"$appName"-wa.scm.azurewebsites.net/api/zipdeploy?isAsync=true"
 
 echo "Package functions"
 cd ../functions && zip -r $functions .
@@ -80,3 +79,4 @@ az functionapp config appsettings set \
 
 # Display the webapp path.
 echo "https://"$appName"-wa.azurewebsites.net"
+
