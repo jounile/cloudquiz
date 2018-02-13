@@ -21,9 +21,9 @@ az group deployment create \
     --resource-group $appName'-rg' \
     --template-file azuredeploy.json \
     --parameters '{"dynamicAppServicePlanName": {"value": "'$appName'-dasp"},
-    			   "appServicePlanName": {"value": "'$appName'-asp"},
-    			   "functionAppName": {"value": "'$appName'-fa"},
-    			   "webAppName": {"value": "'$appName'-wa"},
+             "appServicePlanName": {"value": "'$appName'-asp"},
+             "functionAppName": {"value": "'$appName'-fa"},
+             "webAppName": {"value": "'$appName'-wa"},
                    "documentDBName": {"value": "'$appName'-ddb"},
                    "storageAccountName": {"value": "'$storageAccountName'"},
                    "storageAccountType": {"value": "'$storageAccountType'"}}'
@@ -34,17 +34,17 @@ az group deployment create \
 
 echo "Create database"
 az cosmosdb database create \
-	--name $appName'-ddb' \
-	--db-name $databaseName \
-	--resource-group $appName'-rg'
+  --name $appName'-ddb' \
+  --db-name $databaseName \
+  --resource-group $appName'-rg'
 
 echo "Create collection"
 az cosmosdb collection create \
-	--collection-name $collectionName \
-	--name $appName'-ddb' \
-	--db-name $databaseName \
-	--resource-group $appName'-rg' \
-	--throughput $originalThroughput
+  --collection-name $collectionName \
+  --name $appName'-ddb' \
+  --db-name $databaseName \
+  --resource-group $appName'-rg' \
+  --throughput $originalThroughput
 
 
 
@@ -55,10 +55,10 @@ cd client && zip -r $zipFile .
 
 echo "Get MSDeploy publishing profile and query for publish URL and credentials"
 creds=($(az webapp deployment list-publishing-profiles \
-	--name $appName'-wa' \
-	--resource-group $appName'-rg' \
-	--query "[?contains(publishMethod, 'MSDeploy')].[publishUrl,userName,userPWD]" \
-	--output tsv))
+  --name $appName'-wa' \
+  --resource-group $appName'-rg' \
+  --query "[?contains(publishMethod, 'MSDeploy')].[publishUrl,userName,userPWD]" \
+  --output tsv))
 
 echo "publishUrl: " ${creds[0]}
 echo "userName: " ${creds[1]}
@@ -66,16 +66,16 @@ echo "userPWD: " ${creds[2]}
 
 echo "Deploy ZIP file"
 curl -X POST -u ${creds[1]} \
-	--data-binary @./client/$zipFile "https://"$appName"-wa.scm.azurewebsites.net/api/zipdeploy?isAsync=true"
+  --data-binary @./client/$zipFile "https://"$appName"-wa.scm.azurewebsites.net/api/zipdeploy?isAsync=true"
 
 echo "Package functions"
-cd ./functions && zip -r $functions .
+cd ../functions && zip -r $functions .
 
 echo "Deploy Function App"
 az functionapp deployment source config-zip \
-	--resource-group $appName'-rg' \
-	--name $appName'-fa' \
-	--src $functions
+  --resource-group $appName'-rg' \
+  --name $appName'-fa' \
+  --src $functions
 
 echo "Retrieve cosmosdb connection string"
 endpoint=$(az cosmosdb show \
@@ -98,7 +98,7 @@ echo $key
 az functionapp config appsettings set \
   --name $appName'-fa' \
   --resource-group $appName'-rg' \
-  --setting CosmosDB_Endpoint=$endpoint CosmosDB_Key=$key CosmosDBConnection=AccountEndpoint=$endpoint;AccountKey=$key;
+  --setting CosmosDBConnection='AccountEndpoint='$endpoint';AccountKey='$key';'
 
 # Display the webapp path.
 echo "https://"$appName"-wa.azurewebsites.net"
