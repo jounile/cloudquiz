@@ -61,7 +61,7 @@ if (process.env.NODE_ENV === 'development') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"',
-        API_PATH: '"https://cloudquiz.azurewebsites.net/api/answer"'
+        API_PATH: '"https://cloudquiz-wa.azurewebsites.net/api/answer"'
       }
     })
   ])
@@ -74,7 +74,7 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"',
-        API_PATH: '"https://api.github.com"'
+        API_PATH: '"https://cloudquiz-wa.azurewebsites.net/api/answer"'
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
