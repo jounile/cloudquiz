@@ -26,7 +26,6 @@ az group deployment create \
                    "storageAccountName": {"value": "'$storageAccountName'"},
                    "storageAccountType": {"value": "'$storageAccountType'"}}'
 
-#TODO: Migrate data
 
 echo "Package static website content"
 cd client && zip -r $zipFile .
@@ -38,12 +37,12 @@ creds=($(az webapp deployment list-publishing-profiles \
   --query "[?contains(publishMethod, 'MSDeploy')].[publishUrl,userName,userPWD]" \
   --output tsv))
 
-echo "publishUrl: " ${creds[0]}
-echo "userName: " ${creds[1]}
-echo "userPWD: " ${creds[2]}
+#echo "publishUrl: " ${creds[0]}
+#echo "userName: " ${creds[1]}
+#echo "userPWD: " ${creds[2]}
 
 echo "Deploy ZIP file"
-curl -X POST -u ${creds[1]} \
+curl -X POST -u ${creds[1]}:${creds[2]} \
   --data-binary @./client/$zipFile "https://"$appName"-wa.scm.azurewebsites.net/api/zipdeploy?isAsync=true"
 
 echo "Package functions"
@@ -55,7 +54,7 @@ az functionapp deployment source config-zip \
   --name $appName'-fa' \
   --src $functions
 
-echo "Retrieve cosmosdb connection string"
+echo "Retrieve cosmosdb connection endpoint"
 endpoint=$(az cosmosdb show \
   --name $appName'-ddb' \
   --resource-group $appName'-rg' \
@@ -64,6 +63,7 @@ endpoint=$(az cosmosdb show \
 
 echo $endpoint
 
+echo "Retrieve cosmosdb connection key"
 key=$(az cosmosdb list-keys \
   --name $appName'-ddb' \
   --resource-group $appName'-rg' \
@@ -72,7 +72,7 @@ key=$(az cosmosdb list-keys \
 
 echo $key
 
-# configure function app settings to use cosmosdb connection string
+echo "Configure cosmosdb connection for the function app env settings"
 az functionapp config appsettings set \
   --name $appName'-fa' \
   --resource-group $appName'-rg' \
